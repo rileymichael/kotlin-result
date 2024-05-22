@@ -219,6 +219,38 @@ runBlocking {
 }
 ```
 
+## detekt
+
+A custom [detekt](https://detekt.dev/) ruleset is available. Assuming you have
+detekt configured, you can use the ruleset like so:
+
+```kotlin
+dependencies {
+    detektPlugins("com.michael-bull.kotlin-result:kotlin-result-detekt-rules:2.0.0")
+}
+```
+
+in your `detekt.yml` configuration, you must opt into the rules:
+
+```yaml
+KotlinResultRules:
+  DiscardedBindableScopeStatement:
+    active: true
+```
+
+notes:
+
+- the `detekt` gradle task does not use type resolution by default, which these rules depend on. there are specific tasks
+to run detekt with type resolution, see the [docs](https://detekt.dev/docs/gettingstarted/type-resolution/)
+- as of detekt 1.2.0, detekt verifies all config properties and does not know about our custom ruleset. you need to disable
+validation or exclude the `KotlinResultRules` ruleset properties. see example below
+
+```yaml
+config:
+  validation: true # set it to false to disable _all validation_
+  excludes: "KotlinResultRules.*" # or disable validation for specific rulesets
+```
+
 ## Inspiration
 
 Inspiration for this library has been drawn from other languages in which the
