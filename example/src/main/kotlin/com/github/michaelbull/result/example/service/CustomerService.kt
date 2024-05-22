@@ -4,6 +4,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
+import com.github.michaelbull.result.binding
 import com.github.michaelbull.result.example.model.domain.Created
 import com.github.michaelbull.result.example.model.domain.Customer
 import com.github.michaelbull.result.example.model.domain.CustomerIdMustBePositive
@@ -32,10 +33,12 @@ class CustomerService(
     private val repository: CustomerRepository,
 ) {
 
-    fun getById(id: Long): Result<CustomerDto, DomainMessage> {
-        return parseCustomerId(id)
-            .andThen(::findById)
-            .map(::entityToDto)
+    fun getById(id: Long): Result<CustomerDto, DomainMessage> = binding {
+        // intentional unbound statement
+        parseCustomerId(id)
+        val parsed = parseCustomerId(id).bind()
+        val customer = findById(parsed).bind()
+        entityToDto(customer)
     }
 
     fun save(id: Long, dto: CustomerDto): Result<Event?, DomainMessage> {
