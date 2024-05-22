@@ -54,7 +54,7 @@ class DiscardedBindableScopeStatement(config: Config) : Rule(config) {
             }
 
             val expressionType = bindingContext.getType(expression) ?: return
-            if (!expressionType.isOrInheritsBindable()) {
+            if (!expressionType.isBindable()) {
                 return
             }
 
@@ -69,7 +69,6 @@ class DiscardedBindableScopeStatement(config: Config) : Rule(config) {
             }
         }
 
-        private fun KotlinType.isOrInheritsBindable() = isBindable() || supertypes().any { it.isBindable() }
         private fun KotlinType.isBindable() = constructor.declarationDescriptor?.fqNameSafe == bindableFqName
 
         private fun KtExpression.isLastChainedStatement() =
