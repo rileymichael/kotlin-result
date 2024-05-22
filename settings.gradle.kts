@@ -21,5 +21,6 @@ include(
     "benchmarks",
     "example",
     "kotlin-result",
-    "kotlin-result-coroutines"
+    "kotlin-result-coroutines",
+    "kotlin-result-detekt-rules",
 )
